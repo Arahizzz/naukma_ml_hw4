@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "naukma-ml-hw4"
+version = "0.1.0"
+description = ""
+authors = ["Vadym Nakytniak, Yurii Polishchuk"]
+readme = "README.md"
+packages = [{include = "naukma_ml_hw4"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.1.3"
+numpy = "^1.26.2"
+matplotlib = "^3.8.2"
+scikit-learn = "^1.3.2"
+ipython = "^8.18.1"
+nltk = "^3.8.1"
+joblib = "^1.3.2"
+num2words = "^0.5.13"
+umap = "^0.1.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.27.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
