@@ -39,8 +39,8 @@ if __name__ == "__main__":
     # weights_url = "https://raw.githubusercontent.com/username/repo/main/multi_output_classifier_model.joblib"
     # vectorizer_url = "https://raw.githubusercontent.com/username/repo/main/tfidf_vectorizer.joblib"
 
-    local_weights_path = "./models/linear_regression_classifier_model.joblib"
-    local_vectorizer_path = "./models/tfidf_vectorizer.joblib"
+    local_weights_path = "models/history/linear_regression_classifier_model.joblib"
+    local_vectorizer_path = "models/history/tfidf_vectorizer.joblib"
 
     # download_model_and_vectorizer(weights_url, vectorizer_url, local_weights_path, local_vectorizer_path)
 
