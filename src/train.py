@@ -11,7 +11,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
 from pandarallel import pandarallel
 
-pandarallel.initialize(progress_bar=True)
+pandarallel.initialize(progress_bar=not os.getenv("NO_PROGRESS_BAR").lower() in ['true', '1', 't', 'y'])
 
 from preprocessing import do_preprocessing
 
