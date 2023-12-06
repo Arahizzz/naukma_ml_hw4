@@ -10,6 +10,8 @@ nltk.download("omw-1.4")
 
 stop_punctuation = string.punctuation
 stop_words = set(nltk.corpus.stopwords.words("english"))
+wn = nltk.WordNetLemmatizer()
+ps = nltk.PorterStemmer()
 
 
 def to_lower_case(text):
@@ -43,12 +45,10 @@ def remove_stop_words(tokens):
 
 
 def do_stemming(tokens):
-    ps = nltk.PorterStemmer()
     return [ps.stem(word) for word in tokens]
 
 
 def do_lemmatization(tokens):
-    wn = nltk.WordNetLemmatizer()
     return [wn.lemmatize(word) for word in tokens]
 
 
