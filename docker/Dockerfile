@@ -17,14 +17,12 @@ ENV PYTHONUNBUFFERED=1 \
 
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
-
 # builder-base is used to build dependencies
 FROM python-base as builder-base
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     curl \
-    build-essential
-
+    build-essential 
 # Install Poetry - respects $POETRY_VERSION & $POETRY_HOME
 ENV POETRY_VERSION=1.7.1
 RUN curl -sSL https://install.python-poetry.org | python3 -
@@ -44,9 +42,7 @@ FROM python-base as development
 COPY --from=builder-base $POETRY_HOME $POETRY_HOME
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 
-# Copying in our entrypoint
-COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+
 
 # venv already has runtime deps installed we get a quicker install
 WORKDIR $PYSETUP_PATH
@@ -58,15 +54,22 @@ COPY . .
 EXPOSE 8000
 ENTRYPOINT /docker-entrypoint.sh $0 $@
 
+FROM python-base as dos2unix
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    dos2unix
+
+COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+RUN dos2unix /docker-entrypoint.sh
 
 # 'production' stage uses the clean 'python-base' stage and copyies
 # in only our runtime deps that were installed in the 'builder-base'
 FROM python-base as production
 
+COPY --from=dos2unix /docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder-base $VENV_PATH $VENV_PATH
-
-COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
 
 RUN mkdir /app /app/input /app/checkpoints
 COPY ./src /app/src
