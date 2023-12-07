@@ -4,13 +4,13 @@ import click
 import joblib
 import pandas as pd
 from pandarallel import pandarallel
+from preprocessing import do_preprocessing
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
-from preprocessing import do_preprocessing
 
 pandarallel.initialize(
     progress_bar=os.getenv("NO_PROGRESS_BAR").lower() not in ["true", "1", "t", "y"]

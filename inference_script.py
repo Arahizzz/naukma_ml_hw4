@@ -1,7 +1,6 @@
+import joblib
 import pandas as pd
 import requests
-import joblib
-
 
 class_labels = ["Toxic", "Severe_Toxic", "Obscene", "Threat", "Insult", "Identity_Hate"]
 
