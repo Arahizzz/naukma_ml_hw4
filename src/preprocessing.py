@@ -66,7 +66,7 @@ def convert_nums_to_words(data):
                 word = num2words(word)
             else:
                 word = ""
-        new_text.extend(tokenize_text(re.sub("(-|,\s?)|\s+", " ", word)))
+        new_text.extend(tokenize_text(re.sub("(-|,\\s?)|\\s+", " ", word)))
     return new_text
 
 
