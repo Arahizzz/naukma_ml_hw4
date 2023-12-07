@@ -7,16 +7,24 @@
 .idea
 .vscode
 
-__pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 *.so
 htmlcov/
 .coverage
 .coverage.*
-.pytest_cache/
+coverage_re/
+.*_cache/
 .venv
 venv
+
+EDA/
+checkopints
+input/
+output/
+input/  
+checkpoints/
 
 .DS_Store
 .AppleDouble

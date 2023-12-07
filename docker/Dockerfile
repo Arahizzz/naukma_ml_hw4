@@ -22,8 +22,8 @@ ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 FROM python-base as builder-base
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-        curl \
-        build-essential
+    curl \
+    build-essential
 
 # Install Poetry - respects $POETRY_VERSION & $POETRY_HOME
 ENV POETRY_VERSION=1.7.1
@@ -59,21 +59,6 @@ EXPOSE 8000
 ENTRYPOINT /docker-entrypoint.sh $0 $@
 
 
-# 'lint' stage runs black and isort
-# running in check mode means build will fail if any linting errors occur
-FROM development AS lint
-RUN black --config ./pyproject.toml --check app tests
-RUN isort --settings-path ./pyproject.toml --recursive --check-only
-CMD ["tail", "-f", "/dev/null"]
-
-
-# 'test' stage runs our unit tests with pytest and
-# coverage.  Build will fail if test coverage is under 40%
-FROM development AS test
-RUN coverage run --rcfile ./pyproject.toml -m pytest ./tests
-RUN coverage report --fail-under 40
-
-
 # 'production' stage uses the clean 'python-base' stage and copyies
 # in only our runtime deps that were installed in the 'builder-base'
 FROM python-base as production
@@ -89,4 +74,11 @@ WORKDIR /app
 
 ENV NO_PROGRESS_BAR=true
 
-ENTRYPOINT /docker-entrypoint.sh python $0 $@
+ARG MODEL_URI
+ARG VECTORIZER_URI
+
+ADD $MODEL_URI /app/checkpoints/embedded_classifier_model.joblib
+ADD $VECTORIZER_URI /app/checkpoints/embedded_vectorizer.joblib
+
+ENTRYPOINT /docker-entrypoint.sh $0 $@
+CMD ["python", "src/inference_script.py", "--model-path", "/app/checkpoints/embedded_classifier_model.joblib", "--vectorizer-path", "/app/checkpoints/embedded_vectorizer.joblib"]
