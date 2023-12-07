@@ -1,21 +1,20 @@
 import os
+
 import click
 import joblib
 import pandas as pd
-from tqdm import tqdm
-from sklearn.metrics import accuracy_score
+from pandarallel import pandarallel
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
-from sklearn.ensemble import RandomForestClassifier
-from pandarallel import pandarallel
+from preprocessing import do_preprocessing
 
 pandarallel.initialize(
-    progress_bar=not os.getenv("NO_PROGRESS_BAR").lower() in ["true", "1", "t", "y"]
+    progress_bar=os.getenv("NO_PROGRESS_BAR").lower() not in ["true", "1", "t", "y"]
 )
-
-from preprocessing import do_preprocessing
 
 columns_base = ["ID", "Comment_Text"]
 columns_type = [
@@ -53,7 +52,7 @@ def load_and_preprocess_data(train_path, test_path=None):
     train_df.columns = columns_all
 
     # Preprocessing text data
-    print(f"Preprocessing data")
+    print("Preprocessing data")
     train_df_preprocessed = train_df.copy()
     train_df_preprocessed["Comment_Text_Preprocessed"] = train_df_preprocessed[
         "Comment_Text"
@@ -75,7 +74,7 @@ def init_model(type):
 
 
 def init_vectorizer(X):
-    print(f"Preparing vectorizer")
+    print("Preparing vectorizer")
     tfidf_vectorizer = TfidfVectorizer(
         max_features=10_000, max_df=0.9, smooth_idf=True, use_idf=True
     )
@@ -111,13 +110,13 @@ def train_model(train_df, vectorizer, type, out_folder):
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=101
     )
-    print(f"Vectorizing data")
+    print("Vectorizing data")
     X_train_vectorized = vectorizer.transform(X_train)
     X_test_vectorized = vectorizer.transform(X_test)
 
     model = init_model(type)
 
-    print(f"Fitting model")
+    print("Fitting model")
     model.fit(X_train_vectorized, y_train)
 
     print("Accuracy Score: ", accuracy_score(y_test, model.predict(X_test_vectorized)))
