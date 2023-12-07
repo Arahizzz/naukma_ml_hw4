@@ -7,9 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install LLVM
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "10.0"
+        run: apt-get install -y llvm
       - name: Install Python
         uses: actions/setup-python@v4
         # see details (matrix, python-version, python-version-file, etc.)
