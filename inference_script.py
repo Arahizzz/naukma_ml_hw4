@@ -3,16 +3,18 @@ import requests
 import joblib
 
 
-class_labels = ['Toxic', 'Severe_Toxic', 'Obscene', 'Threat', 'Insult', 'Identity_Hate']
+class_labels = ["Toxic", "Severe_Toxic", "Obscene", "Threat", "Insult", "Identity_Hate"]
 
 
-def download_model_and_vectorizer(url_model, url_vectorizer, save_path_model, save_path_vectorizer):
+def download_model_and_vectorizer(
+    url_model, url_vectorizer, save_path_model, save_path_vectorizer
+):
     response_model = requests.get(url_model)
-    with open(save_path_model, 'wb') as f:
+    with open(save_path_model, "wb") as f:
         f.write(response_model.content)
 
     response_vectorizer = requests.get(url_vectorizer)
-    with open(save_path_vectorizer, 'wb') as f:
+    with open(save_path_vectorizer, "wb") as f:
         f.write(response_vectorizer.content)
 
 
@@ -31,7 +33,9 @@ def output_results(prediction_proba):
     prediction_df = pd.DataFrame()
     for i, output_name in enumerate(class_labels):
         prediction_df[output_name] = prediction_proba[i][:, 1]
-    formatted_df = prediction_df.round(3).to_string(float_format=lambda x: f'{x:.3f}' if 0 < x < 1 else f'{x:.0f}', index=False)
+    formatted_df = prediction_df.round(3).to_string(
+        float_format=lambda x: f"{x:.3f}" if 0 < x < 1 else f"{x:.0f}", index=False
+    )
     print(f"Predicted classes:\n{formatted_df}")
 
 
