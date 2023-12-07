@@ -23,6 +23,7 @@ num2words = "^0.5.13"
 click = "^8.1.7"
 tqdm = "^4.66.1"
 pandarallel = "^1.6.5"
+great-expectations = "^0.18.3"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -28,6 +28,9 @@ columns_type = [
 class_labels = ["Toxic", "Severe_Toxic", "Obscene", "Threat", "Insult", "Identity_Hate"]
 columns_all = columns_base + columns_type
 
+NUM_OF_FEATURES = 5_000
+GOOD_COMMENTS_RATIO = 3
+
 
 def load_and_preprocess_data(train_path, test_path=None):
     print(f"Loading data from {train_path}")
@@ -78,7 +81,7 @@ def init_vectorizer(X):
     print("Sample of text data:")
     print(X.head())
     tfidf_vectorizer = TfidfVectorizer(
-        max_features=10_000, max_df=0.9, smooth_idf=True, use_idf=True
+        max_features=NUM_OF_FEATURES, max_df=0.9, smooth_idf=True, use_idf=True
     )
     tfidf_matrix = tfidf_vectorizer.fit_transform(X)
     feature_names = tfidf_vectorizer.get_feature_names_out()
@@ -95,7 +98,7 @@ def train_model(train_df, vectorizer, type, out_folder):
     # Filter the same amount of good comments for model training
     good_comments_df = (
         train_df[train_df[columns_type].eq(0).all(axis=1)]
-        .sample(n=len(hate_comments_df), random_state=42)
+        .sample(n=GOOD_COMMENTS_RATIO * len(hate_comments_df), random_state=42)
         .copy()
         .reset_index(drop=True)
     )
