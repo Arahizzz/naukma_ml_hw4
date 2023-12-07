@@ -33,6 +33,4 @@ jobs:
         run: poetry run ruff .
         continue-on-error: true
       - name: Run the automated tests
-        run: |
-          poetry run pytest -v
-          poetry run coverage report --fail-under 40
+        run: poetry run pytest --cov --cov-fail-under=40
