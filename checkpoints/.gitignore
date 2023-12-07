@@ -1,2 +1,5 @@
 *
 !.gitignore
+!logistic_regression_classifier_model.joblib
+!random_forest_classifier_model.joblib
+!tfidf_vectorizer.joblib
