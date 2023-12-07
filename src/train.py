@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 
-from src.preprocessing import do_preprocessing
+from preprocessing import do_preprocessing
 
 pandarallel.initialize(
     progress_bar=os.getenv("NO_PROGRESS_BAR", "").lower() not in ["true", "1", "t", "y"]
@@ -76,6 +76,8 @@ def init_model(type):
 
 def init_vectorizer(X):
     print("Preparing vectorizer")
+    print("Sample of text data:")
+    print(X.head())
     tfidf_vectorizer = TfidfVectorizer(
         max_features=10_000, max_df=0.9, smooth_idf=True, use_idf=True
     )
@@ -154,7 +156,7 @@ def main(model_type, data_folder, output_folder, start_step):
         )
 
     if start_step == "vectorize" or start_step == "preprocess":
-        vectorizer, _, _ = init_vectorizer(train_df)
+        vectorizer, _, _ = init_vectorizer(train_df['Comment_Text_Preprocessed'])
         # Save vectorizer
         joblib.dump(vectorizer, f"{output_folder}/tfidf_vectorizer.joblib")
         print(f"Vectorizer saved to {output_folder}/tfidf_vectorizer.joblib")
