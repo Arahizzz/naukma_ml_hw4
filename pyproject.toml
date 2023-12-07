@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["Vadym Nakytniak", "Yurii Polishchuk"]
 readme = "README.md"
-packages = [{include = "naukma_ml_hw4"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
