@@ -6,7 +6,6 @@ from joblib import load
     scope="module",
     params=[
         "checkpoints/logistic_regression_classifier_model.joblib",
-        "checkpoints/random_forest_classifier_model.joblib",
     ],
 )
 def predictor(request):
